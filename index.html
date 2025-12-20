@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>صفحة شراء المنتج</title>
+  <style>
+    :root{
+      --bg:#f4f6fb;
+      --card:#ffffff;
+      --primary:#6366f1;
+      --secondary:#34d399;
+      --accent:#fbbf24;
+      --text:#111827;
+      --muted:#6b7280;
+      --danger:#ef4444;
+      --radius:18px;
+    }
+    *{box-sizing:border-box;font-family:'Cairo',sans-serif;}
+    body{margin:0;background:linear-gradient(180deg,#ebebeb,#eef2ff);color:var(--text);}
+    .container{max-width:520px;margin:auto;padding:16px;}
+
+    /* HERO */
+    .hero{
+      background:linear-gradient(135deg,#000000,#f06718);
+      color:white;
+      padding:48px 20px 56px;
+      border-bottom-left-radius:36px;
+      border-bottom-right-radius:36px;
+    }
+    .hero-inner{
+      max-width:520px;
+      margin:0 auto;
+      text-align:center;
+    }
+    .hero h1{margin:0;font-size:28px;font-weight:900}
+    .hero p{margin:14px 0 20px;font-size:16px;opacity:.95}
+    .hero button{background:white;color:#000000;border:none;padding:16px 34px;border-radius:999px;font-size:20px;font-weight:900;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+
+    /* similar products */
+    .similar-section{margin-top:28px}
+.section-title{font-size:20px;font-weight:800;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.similar-slider-wrapper{position:relative;overflow:hidden}
+.similar-slider{display:flex;transition:transform 0.5s ease;}
+.similar{min-width:100%; background:var(--card);border-radius:16px;padding:10px;text-align:center;box-shadow:0 6px 16px rgba(0,0,0,.08);margin-right:10px}
+.similar img{width:100%;border-radius:12px}
+.similar span{display:block;margin-top:6px;font-size:14px;font-weight:600}
+.similar .price{font-size:14px;color:var(--danger);font-weight:800;margin-top:4px}
+.similar-slider-wrapper{
+  direction: ltr; /* مهم جدًا */
+}
+
+/* أزرار التصفح */
+.similar-prev, .similar-next{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(0,0,0,0.25);
+  color:white;
+  border:none;
+  font-size:24px;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  cursor:pointer;
+  z-index:10;
+}
+.similar-prev{left:5px;}
+.similar-next{right:5px;}
+
+/* أجهزة أكبر */
+@media(min-width:768px){
+  .similar{min-width:30%} /* 3 منتجات في Desktop */
+}
+
+    /* slider */
+    .slider{position:relative;overflow:hidden;border-radius:var(--radius);margin:10px 0 6px}
+    .slides{display:flex;transition:transform .8s ease}
+    .slides img{width:100%;flex-shrink:0;max-height:340px;object-fit:cover}
+    .slider {
+  direction: ltr; /* مهم جدًا */
+}
+    /* price */
+    .price-box{text-align:center;margin:18px 0}
+    .old{color:var(--muted);text-decoration:line-through;font-size:17px}
+    .new{color:#f5a300;font-size:32px;font-weight:900}
+    .deal{background:#f5a300;color:#000000;padding:6px 14px;border-radius:999px;font-size:13px;display:inline-block;margin-top:6px;font-weight:700}
+
+    /* form */
+    form{background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:0 12px 28px rgba(0,0,0,.12)}
+    label{font-size:14px;margin-top:12px;display:block;font-weight:600}
+    input,select{width:100%;padding:13px;margin-top:6px;border-radius:14px;border:1px solid #e5e7eb;font-size:15px}
+
+    .radio-group{display:flex;gap:12px;margin-top:8px}
+    .radio{flex:1;border:1px solid #e5e7eb;border-radius:14px;padding:12px;text-align:center;font-weight:600}
+    .radio input{margin-left:6px}
+
+    /* ميكرو أنيميشن للفورم */
+.buy-btn{
+  margin-top:18px;
+  width:100%;
+  padding:18px;
+  font-size:22px;
+  font-weight:900;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,#fbe524,#f59e0b);
+  color:#78350f;
+  cursor:pointer;
+  box-shadow:0 14px 30px rgba(0,0,0,.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-position 0.4s ease;
+  background-size:200% 200%; /* لتحريك gradient */
+  background-position:0% 0%;
+}
+.buy-btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 18px 35px rgba(0,0,0,.35);
+  background-position:100% 0%;
+}
+.buy-btn:active{
+  transform:scale(0.97);
+}
+.buy-btn:disabled{
+  background: linear-gradient(135deg, #e0d9b9, #f3f4d6); /* رمادي فاتح مع لمسة صفراء */
+  color: #9c8f6a; /* لون نص مناسب */
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.quantity-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.quantity-field input {
+  flex: 1;
+  padding: 13px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  font-size: 15px;
+  text-align: center;
+}
+
+.qty-btn {
+  padding: 0 16px;
+  font-size: 18px;
+  font-weight: 700;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: var(--card);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qty-btn:hover {
+  background: var(--accent);
+  color: white;
+}
+.total-card {
+  background: var(--card);
+  padding: 18px;
+  border-radius: var(--radius);
+  box-shadow: 0 12px 28px rgba(0,0,0,.12);
+  margin-top: 16px;
+}
+
+.total-card h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.price-row.total {
+  font-size: 20px;
+  font-weight: 900;
+  margin-top: 12px;
+  color: var(--danger);
+}
+
+
+    @media(min-width:768px){.container{max-width:960px}}
+  </style>
+
+   <!-- Meta Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1673852736922691');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1673852736922691&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+</head>
+<body>
+
+    <section class="hero">
+        <div class="hero-inner">
+          <h1>اقضي على البرد نهائيا وبضغطة زر</h1>
+          <p>جودة عالية، امان مضمون، وتوصيل سريع لجميع ولايات الجزائر</p>
+          <button onclick="document.querySelector('form').scrollIntoView({behavior:'smooth'})">اطلبه الآن</button>
+        </div>
+
+          <!-- slider -->
+    <div class="slider">
+      <div class="slides" id="slides">
+        <img src="main1.jpg" />
+        <img src="main2.jpg" />
+        <img src="main3.jpg" />
+      </div>
+    </div>
+      </section>
+  
+  <div class="container">
+
+
+    <!-- price -->
+    <div class="price-box">
+      <div class="old">بدلًا من 4,500 دج</div>
+      <div class="new">3,450 دج</div>
+      <div class="deal">عرض محدود + الدفع عند الاستلام</div>
+    </div>
+
+    <!-- form -->
+    <form action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="5700de29-25f1-4a07-b64c-0d6eecea413a">
+            <input type="hidden" name="redirect" value="https://iisoheib.github.io/chaufage-electrique/thankyoupage.html">
+            <input type="hidden" name="product" value="دفاية 800واط">
+            <label>الاسم الكامل</label>
+      <input name="name" type="text" />
+
+      <label>رقم الهاتف</label>
+      <input name= "phone-number" type="tel" id="phone" required placeholder="07xxxxxxxx" />
+      <label>الكمية</label>
+       <div class="quantity-field">
+        <button type="button" class="qty-btn" id="decrease">-</button>
+        <input name="quantity" type="number" id="quantity" value="1" min="1" readonly/>
+        <button type="button" class="qty-btn" id="increase">+</button>
+      </div>
+
+      <label>الولاية</label>
+  <select name="wilaya" id="wilaya" required>
+    <option value="">اختر الولاية</option>
+    <option data-office="600" data-home="1000">01 - أدرار</option>
+    <option data-office="350" data-home="600">02 - الشلف</option>
+    <option data-office="500" data-home="750">03 - الأغواط</option>
+    <option data-office="400" data-home="700">04 - أم البواقي</option>
+    <option data-office="350" data-home="650">05 - باتنة</option>
+    <option data-office="300" data-home="550">06 - بجاية</option>
+    <option data-office="500" data-home="800">07 - بسكرة</option>
+    <option data-office="700" data-home="1000">08 - بشار</option>
+    <option data-office="00" data-home="250">09 - البليدة</option>
+    <option data-office="400" data-home="600">10 - البويرة</option>
+    <option data-office="600" data-home="1200">11 - تمنراست</option>
+    <option data-office="450" data-home="700">12 - تبسة</option>
+    <option data-office="400" data-home="700">13 - تلمسان</option>
+    <option data-office="400" data-home="700">14 - تيارت</option>
+    <option data-office="350" data-home="550">15 - تيزي وزو</option>
+    <option data-office="100" data-home="250">16 - الجزائر</option>
+    <option data-office="500" data-home="750">17 - الجلفة</option>
+<option data-office="400" data-home="600">18 - جيجل</option>
+<option data-office="350" data-home="550">19 - سطيف</option>
+<option data-office="450" data-home="750">20 - سعيدة</option>
+<option data-office="400" data-home="650">21 - سكيكدة</option>
+<option data-office="400" data-home="650">22 - سيدي بلعباس</option>
+<option data-office="350" data-home="550">23 - عنابة</option>
+<option data-office="400" data-home="700">24 - قالمة</option>
+<option data-office="350" data-home="550">25 - قسنطينة</option>
+<option data-office="400" data-home="600">26 - المدية</option>
+<option data-office="400" data-home="600">27 - مستغانم</option>
+<option data-office="400" data-home="650">28 - المسيلة</option>
+<option data-office="400" data-home="650">29 - معسكر</option>
+<option data-office="500" data-home="800">30 - ورقلة</option>
+<option data-office="300" data-home="550">31 - وهران</option>
+<option data-office="550" data-home="850">32 - البيض</option>
+<option data-office="900" data-home="1300">33 - إليزي</option>
+<option data-office="400" data-home="600">34 - برج بوعريريج</option>
+<option data-office="350" data-home="500">35 - بومرداس</option>
+<option data-office="400" data-home="700">36 - الطارف</option>
+<option data-office="900" data-home="1300">37 - تندوف</option>
+<option data-office="400" data-home="700">38 - تيسمسيلت</option>
+<option data-office="500" data-home="800">39 - الوادي</option>
+<option data-office="450" data-home="700">40 - خنشلة</option>
+<option data-office="450" data-home="800">41 - سوق أهراس</option>
+<option data-office="350" data-home="500">42 - تيبازة</option>
+<option data-office="400" data-home="650">43 - ميلة</option>
+<option data-office="400" data-home="600">44 - عين الدفلى</option>
+<option data-office="600" data-home="900">45 - النعامة</option>
+<option data-office="450" data-home="600">46 - عين تموشنت</option>
+<option data-office="500" data-home="850">47 - غرداية</option>
+<option data-office="450" data-home="600">48 - غليزان</option>
+<option data-office="700" data-home="1200">49 - تيميمون</option>
+<option data-office="00" data-home="00">50 - برج باجي مختار</option>
+<option data-office="500" data-home="800">51 - أولاد جلال</option>
+<option data-office="1100" data-home="1100">52 - بني عباس</option>
+<option data-office="700" data-home="1200">53 - عين صالح</option>
+<option data-office="00" data-home="00">54 - عين قزام</option>
+<option data-office="500" data-home="850">55 - تقرت</option>
+<option data-office="00" data-home="00">56 - جانت</option>
+<option data-office="900" data-home="900">57 - المغير</option>
+<option data-office="600" data-home="900">58 - المنيعة</option>
+  </select>
+
+      <label>البلدية</label>
+      <input name="baladia" type="text"  />
+
+      <label>العنوان</label>
+      <input name="adress" type="text" />
+
+      <label>طريقة الاستلام (مكتب شركة التوصيل DHD)</label>
+      <div class="radio-group">
+        <label class="radio"><input type="radio" name="place" value="office" checked /> المكتب</label>
+        <label class="radio"><input type="radio" name="place" value="home" /> المنزل</label>
+      </div>
+
+      <button class="buy-btn" id="buyBtn" disabled>🛒 اطلب الآن</button>
+      <div id="phoneHint" style="color:red; font-size:16px; font-weight:bold; text-align:center; margin-top:10px; display:block;">
+        يرجى التحقق من صحة رقم الهاتف قبل المتابعة
+      </div>
+      
+      
+    </form>
+
+      <!-- total price card -->
+      <div class="total-card">
+     <h3>ملخص الطلب</h3>
+     <div class="price-row">
+      <span>سعر المنتج:</span>
+      <span id="productPrice">3,450 دج</span>
+     </div>
+     <div class="price-row">
+      <span>التوصيل:</span>
+      <span id="deliveryPrice"> ( يظهر السعر بعد اختيار الولاية)</span>
+     </div>
+     <div class="price-row total">
+      <span>الإجمالي:</span>
+      <span id="totalPrice">3,450 دج</span>
+     </div>
+     </div>
+  
+    <section class="similar-section">
+        <h2 class="section-title">منتجات مشابهة 🔁</h2>
+        <div class="similar-slider-wrapper">
+          <button class="similar-prev">‹</button>
+          <div class="similar-slider">
+            <div class="similar" >
+            <a href="chaufageel2000w.html" style="text-decoration: none; color: #000000;">
+              <img src="product1.jpg" />
+              <span>دفاية متعددة الجوانب مع مشواة</span>
+              <div class="price">4,950 دج</div>
+            </a>
+            </div>
+            <div class="similar">
+              <a href="chaufageel1200w.html" style="text-decoration: none; color: #000000;">
+              <img src="product2.jpg" />
+              <span>مدفأة كهربائية 1200 واط</span>
+              <div class="price">2,300 دج</div>
+             </a>
+            </div>
+            <div class="similar">
+             <a href="chaufageled.html" style="text-decoration: none; color: #000000;">
+              <img src="product3.jpg" />
+              <span>مدفأة ديكورية LED بتأثير لهب واقعي</span>
+              <div class="price">5,900 دج</div>
+             </a>
+            </div>
+          </div>
+          <button class="similar-next">›</button>
+        </div>
+      </section>
+      
+  
+  </div>
+
+  <script>
+
+
+    let index=0;
+    const slides=document.getElementById('slides');
+    const total=slides.children.length;
+    setInterval(()=>{
+      index=(index+1)%total;
+      slides.style.transform=`translateX(${index*-100}%)`;
+    },2000);
+
+
+    const similarSlider = document.querySelector('.similar-slider');
+const similarItems = document.querySelectorAll('.similar');
+const prevBtn = document.querySelector('.similar-prev');
+const nextBtn = document.querySelector('.similar-next');
+
+let similarIndex = 0;
+const totalSimilar = similarItems.length;
+
+// عرض العناصر حسب الـ viewport
+function updateSlider() {
+  const width = similarItems[0].offsetWidth + 10; // + margin
+  similarSlider.style.transform = `translateX(${-similarIndex * width}px)`;
+}
+
+// أزرار
+prevBtn.addEventListener('click', ()=>{
+  similarIndex = similarIndex > 0 ? similarIndex-1 : totalSimilar-1;
+  updateSlider();
+});
+
+nextBtn.addEventListener('click', ()=>{
+  similarIndex = (similarIndex+1)%totalSimilar;
+  updateSlider();
+});
+
+// Auto-slide كل 3 ثواني
+setInterval(()=>{
+  similarIndex = (similarIndex+1)%totalSimilar;
+  updateSlider();
+}, 3000);
+
+// عند تغيير حجم الشاشة
+window.addEventListener('resize', updateSlider);
+updateSlider();
+
+
+const phoneInput = document.getElementById('phone');
+const buyBtn = document.getElementById('buyBtn');
+
+// Regular expression للرقم الجزائري: يبدأ بـ 05 أو 06 أو 07، 10 أرقام
+const algerianPhoneRegex = /^(05|06|07)\d{8}$/;
+
+phoneInput.addEventListener('input', () => {
+    if(algerianPhoneRegex.test(phoneInput.value)){
+        buyBtn.disabled = false;
+        phoneHint.style.display = 'none';
+    } else {
+        buyBtn.disabled = true;
+        phoneHint.style.display = 'block';
+    }
+});
+
+
+const qtyInput = document.getElementById('quantity');
+const increaseBtn = document.getElementById('increase');
+const decreaseBtn = document.getElementById('decrease');
+
+increaseBtn.addEventListener('click', () => {
+  qtyInput.value = parseInt(qtyInput.value) + 1;
+  calculateTotal();
+});
+
+decreaseBtn.addEventListener('click', () => {
+  if(parseInt(qtyInput.value) > 1) {
+    qtyInput.value = parseInt(qtyInput.value) - 1;
+    calculateTotal();
+  }
+});
+
+
+const quantityInput = document.getElementById('quantity'); // حقل الكمية
+const wilayaSelect = document.getElementById('wilaya'); // select الولاية
+const placeRadios = document.querySelectorAll('input[name="place"]'); // الراديو
+
+const productPriceBase = 3450; // سعر المنتج الأساسي
+
+const productPriceEl = document.getElementById('productPrice');
+const deliveryPriceEl = document.getElementById('deliveryPrice');
+const totalPriceEl = document.getElementById('totalPrice');
+
+function calculateTotal() {
+  const quantity = parseInt(quantityInput.value) || 1;
+  const wilayaOption = wilayaSelect.selectedOptions[0];
+  const deliveryType = document.querySelector('input[name="place"]:checked').value;
+
+  let delivery = 0;
+  if (wilayaOption && wilayaOption.dataset) {
+    // بيانات التوصيل المخزنة في data-office و data-home
+    delivery = deliveryType === 'office' ? parseInt(wilayaOption.dataset.office) : parseInt(wilayaOption.dataset.home);
+  }
+
+  const total = (productPriceBase * quantity) + delivery;
+
+  productPriceEl.textContent = (productPriceBase * quantity).toLocaleString() + ' دج';
+  deliveryPriceEl.textContent = delivery.toLocaleString() + ' دج';
+  totalPriceEl.textContent = total.toLocaleString() + ' دج';
+}
+
+// تحديث الحساب عند أي تغيير
+quantityInput.addEventListener('input', calculateTotal);
+wilayaSelect.addEventListener('change', calculateTotal);
+placeRadios.forEach(radio => radio.addEventListener('change', calculateTotal));
+
+
+
+  </script>
+</body>
+</html>
